@@ -7,7 +7,7 @@ namespace HexArch.Infrastructure.Endpoints.Authors;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthorController(ICreateAuthorService CreateAuthorService, IGetAuthorService GetAuthorService) : ControllerBase
+public class AuthorController(LinkGenerator LinkGenerator, ICreateAuthorService CreateAuthorService, IGetAuthorService GetAuthorService) : ControllerBase
 {
     [HttpGet("{id}", Name = "GetAuthorById")]
     public IActionResult Get(Guid id)
@@ -24,7 +24,7 @@ public class AuthorController(ICreateAuthorService CreateAuthorService, IGetAuth
     {
         var author = CreateAuthorService.Create(dto.FirstName, dto.LastName);
 
-        var resourceUrl = Url.Action("GetAuthorById", new { id = author.Id });
+        var resourceUrl = LinkGenerator.GetUriByName(HttpContext, "GetAuthorById", new { id = author.Id.Value.ToString() });
 
         return Created(resourceUrl, CreateAuthorReturnDto.FromEntity(author));
     }
