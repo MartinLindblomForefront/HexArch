@@ -1,6 +1,7 @@
 using HexArch.Application.Services;
 using HexArch.Domain.Repositories;
 using HexArch.Domain.Services;
+using HexArch.Infrastructure.CommandLine;
 using HexArch.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,9 @@ else
     builder.Services.AddSingleton<IBookRepository, CosmosBookRepository>();
     builder.Services.AddSingleton<IAuthorRepository, CosmosAuthorRepository>();
 }
+
+builder.Services.AddTransient<ICommandLineHandler, CreateAuthorCommandLineHandler>();
+builder.Services.AddHostedService<CliReader>();
 
 var app = builder.Build();
 
